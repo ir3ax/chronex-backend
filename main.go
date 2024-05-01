@@ -46,6 +46,7 @@ func main() {
 	//Product
 	router.POST("/admin/product", gin.Bind(binding.SaveProductRequest{}), SaveProductHandler(ChronexSvc))
 	router.GET("/admin/product-sort/:sort", GetAllProductHandler(ChronexSvc))
+	router.GET("/admin/product-dropdown", GetAllProductDropdownHandler(ChronexSvc))
 	router.GET("/admin/product/:productId", GetAllProductByIdHandler(ChronexSvc))
 	router.PUT("/admin/product-update", gin.Bind(binding.UpdateProductRequest{}), UpdateProductHandler(ChronexSvc))
 	router.PUT("/admin/product-update-quantity", gin.Bind(binding.UpdateProductQuantityRequest{}), UpdateProductQuantityHandler(ChronexSvc))
@@ -161,6 +162,22 @@ func GetAllProductHandler(ChronexSvc *services.ChronexAdminService) gin.HandlerF
 			Search:            search,
 			SortOptionProduct: sort,
 		})
+
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, productDetailsRes)
+	}
+}
+
+func GetAllProductDropdownHandler(MovetechSvc *services.ChronexAdminService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+
+		productDetailsRes, err := MovetechSvc.GetAllProductDropdown(c, &pb.GetAllProductDropdownRequest{})
 
 		if err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{

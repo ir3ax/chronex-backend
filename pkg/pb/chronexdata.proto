@@ -13,6 +13,7 @@ service ChronexAdminProtoService {
     rpc GetAllFreebies (GetAllFreebiesRequest) returns (GetAllFreebiesResponse) {}
     rpc GetAllFreebiesDropdown (GetAllFreebiesDropdownRequest) returns (GetAllFreebiesDropdownResponse) {}
     rpc GetAllProduct (GetAllProductRequest) returns (GetAllProductResponse) {}
+    rpc GetAllProductDropdown (GetAllProductDropdownRequest) returns (GetAllProductDropdownResponse) {}
     rpc GetAllReviews (GetAllReviewsRequest) returns (GetAllReviewsResponse) {}
     rpc GetAllOrder (GetAllOrderRequest) returns (GetAllOrderResponse) {}
     rpc GetAllHomeImages (GetAllHomeImagesRequest) returns (GetAllHomeImagesResponse) {}
@@ -95,6 +96,14 @@ message GetAllProductRequest {
 }
 
 message GetAllProductResponse {
+    repeated ProductData productData = 1;
+}
+
+message GetAllProductDropdownRequest {
+   
+}
+
+message GetAllProductDropdownResponse {
     repeated ProductData productData = 1;
 }
 

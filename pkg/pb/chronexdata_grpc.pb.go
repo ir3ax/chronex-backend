@@ -30,6 +30,7 @@ type ChronexAdminProtoServiceClient interface {
 	GetAllFreebies(ctx context.Context, in *GetAllFreebiesRequest, opts ...grpc.CallOption) (*GetAllFreebiesResponse, error)
 	GetAllFreebiesDropdown(ctx context.Context, in *GetAllFreebiesDropdownRequest, opts ...grpc.CallOption) (*GetAllFreebiesDropdownResponse, error)
 	GetAllProduct(ctx context.Context, in *GetAllProductRequest, opts ...grpc.CallOption) (*GetAllProductResponse, error)
+	GetAllProductDropdown(ctx context.Context, in *GetAllProductDropdownRequest, opts ...grpc.CallOption) (*GetAllProductDropdownResponse, error)
 	GetAllReviews(ctx context.Context, in *GetAllReviewsRequest, opts ...grpc.CallOption) (*GetAllReviewsResponse, error)
 	GetAllOrder(ctx context.Context, in *GetAllOrderRequest, opts ...grpc.CallOption) (*GetAllOrderResponse, error)
 	GetAllHomeImages(ctx context.Context, in *GetAllHomeImagesRequest, opts ...grpc.CallOption) (*GetAllHomeImagesResponse, error)
@@ -127,6 +128,15 @@ func (c *chronexAdminProtoServiceClient) GetAllFreebiesDropdown(ctx context.Cont
 func (c *chronexAdminProtoServiceClient) GetAllProduct(ctx context.Context, in *GetAllProductRequest, opts ...grpc.CallOption) (*GetAllProductResponse, error) {
 	out := new(GetAllProductResponse)
 	err := c.cc.Invoke(ctx, "/api.ChronexAdminProtoService/GetAllProduct", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *chronexAdminProtoServiceClient) GetAllProductDropdown(ctx context.Context, in *GetAllProductDropdownRequest, opts ...grpc.CallOption) (*GetAllProductDropdownResponse, error) {
+	out := new(GetAllProductDropdownResponse)
+	err := c.cc.Invoke(ctx, "/api.ChronexAdminProtoService/GetAllProductDropdown", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -334,6 +344,7 @@ type ChronexAdminProtoServiceServer interface {
 	GetAllFreebies(context.Context, *GetAllFreebiesRequest) (*GetAllFreebiesResponse, error)
 	GetAllFreebiesDropdown(context.Context, *GetAllFreebiesDropdownRequest) (*GetAllFreebiesDropdownResponse, error)
 	GetAllProduct(context.Context, *GetAllProductRequest) (*GetAllProductResponse, error)
+	GetAllProductDropdown(context.Context, *GetAllProductDropdownRequest) (*GetAllProductDropdownResponse, error)
 	GetAllReviews(context.Context, *GetAllReviewsRequest) (*GetAllReviewsResponse, error)
 	GetAllOrder(context.Context, *GetAllOrderRequest) (*GetAllOrderResponse, error)
 	GetAllHomeImages(context.Context, *GetAllHomeImagesRequest) (*GetAllHomeImagesResponse, error)
@@ -385,6 +396,9 @@ func (UnimplementedChronexAdminProtoServiceServer) GetAllFreebiesDropdown(contex
 }
 func (UnimplementedChronexAdminProtoServiceServer) GetAllProduct(context.Context, *GetAllProductRequest) (*GetAllProductResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllProduct not implemented")
+}
+func (UnimplementedChronexAdminProtoServiceServer) GetAllProductDropdown(context.Context, *GetAllProductDropdownRequest) (*GetAllProductDropdownResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllProductDropdown not implemented")
 }
 func (UnimplementedChronexAdminProtoServiceServer) GetAllReviews(context.Context, *GetAllReviewsRequest) (*GetAllReviewsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllReviews not implemented")
@@ -603,6 +617,24 @@ func _ChronexAdminProtoService_GetAllProduct_Handler(srv interface{}, ctx contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ChronexAdminProtoServiceServer).GetAllProduct(ctx, req.(*GetAllProductRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ChronexAdminProtoService_GetAllProductDropdown_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetAllProductDropdownRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChronexAdminProtoServiceServer).GetAllProductDropdown(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/api.ChronexAdminProtoService/GetAllProductDropdown",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChronexAdminProtoServiceServer).GetAllProductDropdown(ctx, req.(*GetAllProductDropdownRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1023,6 +1055,10 @@ var ChronexAdminProtoService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllProduct",
 			Handler:    _ChronexAdminProtoService_GetAllProduct_Handler,
+		},
+		{
+			MethodName: "GetAllProductDropdown",
+			Handler:    _ChronexAdminProtoService_GetAllProductDropdown_Handler,
 		},
 		{
 			MethodName: "GetAllReviews",

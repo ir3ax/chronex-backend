@@ -187,6 +187,50 @@ func (s *ChronexAdminService) GetAllProduct(ctx context.Context, req *pb.GetAllP
 	return response, nil
 }
 
+func (s *ChronexAdminService) GetAllProductDropdown(ctx context.Context, req *pb.GetAllProductDropdownRequest) (*pb.GetAllProductDropdownResponse, error) {
+	response := &pb.GetAllProductDropdownResponse{
+		ProductData: []*pb.ProductData{},
+	}
+
+	// Build your query based on the request parameters
+	query := s.DB.Model(&models.ProductData{})
+
+	// Filter by active status
+	query = query.Where("product_status = ?", "ACT")
+
+	// Execute the query
+	var productDataValue []models.ProductData
+	if err := query.Find(&productDataValue).Error; err != nil {
+		return nil, status.Error(codes.Internal, fmt.Sprintf("Failed to fetch product data: %v", err))
+	}
+
+	// Map the retrieved data to protobuf message
+	for _, data := range productDataValue {
+		response.ProductData = append(response.ProductData, &pb.ProductData{
+			ProductId:        data.ProductId.String(),
+			ProductName:      data.ProductName,
+			Img:              string(data.Img),
+			Discount:         data.Discount,
+			SupplierPrice:    data.SupplierPrice,
+			OriginalPrice:    data.OriginalPrice,
+			DiscountedPrice:  data.DiscountedPrice,
+			Description1:     data.Description1,
+			Description2:     string(data.Description2),
+			OriginalQuantity: data.OriginalQuantity,
+			CurrentQuantity:  data.CurrentQuantity,
+			ProductStatus:    data.ProductStatus,
+			ProductSold:      data.ProductSold,
+			ProductFreebies:  string(data.ProductFreebies),
+			CreatedBy:        data.CreatedBy.String(),
+			CreatedAt:        data.CreatedAt.Unix(),
+			UpdatedBy:        data.UpdatedBy.String(),
+			UpdatedAt:        data.UpdatedAt.Unix(),
+		})
+	}
+
+	return response, nil
+}
+
 func (s *ChronexAdminService) GetAllProductById(ctx context.Context, req *pb.GetAllProductRequestById) (*pb.GetAllProductResponseById, error) {
 	response := &pb.GetAllProductResponseById{
 		ProductData: []*pb.ProductData{},
